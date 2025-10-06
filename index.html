@@ -36,7 +36,7 @@
         }
         .loader {
             border: 6px solid #8a5adc;
-            border-top: 6px solid #84fab0;
+            border-top: 6px solid #b388ff;
             border-radius: 50%;
             width: 48px;
             height: 48px;
@@ -61,6 +61,7 @@
             color: rgba(138, 90, 220, 0.15);
             animation: float linear infinite;
             font-size: 2.5rem;
+            will-change: transform;
         }
         @keyframes float {
             0% {
@@ -89,6 +90,8 @@
             transition: opacity 0.8s ease, transform 0.8s ease;
             position: relative;
             z-index: 1;
+            padding: 40px 0;
+            margin: 40px 0;
         }
         .section.visible {
             opacity: 1;
@@ -96,14 +99,21 @@
         }
         .slide-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
             gap: 40px;
             width: 90vw;
             max-width: 1200px;
-            background: rgba(30, 32, 34, 0.95);
+            background: rgba(20, 20, 30, 0.65); /* Más oscuro y más transparente */
             border-radius: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             padding: 60px 40px;
+        }
+        /* Si .slide-content tiene .image-area, usa dos columnas */
+        .slide-content:has(.image-area) {
+            grid-template-columns: 1fr 1fr;
+        }
+        /* Si NO tiene .image-area, usa una sola columna */
+        .slide-content:not(:has(.image-area)) {
+            grid-template-columns: 1fr;
         }
         .card {
             background: linear-gradient(120deg, #2d1b4e 80%, #8a5adc 100%);
@@ -169,17 +179,54 @@
         .console-prompt {
             color: #8fd3f4;
         }
-        h1, h2, h3 {
-            color: #84fab0;
+        h1 {
+            color: #8a5adc;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            letter-spacing: 0.05em;
+        }
+        h2 {
+            color: #b388ff;
+            font-size: 2em;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            letter-spacing: 0.03em;
+        }
+        h3 {
+            color: #8fd3f4;
+            font-size: 1.5em;
+            margin-top: 15px;
+            margin-bottom: 12px;
+            font-weight: 500;
         }
         .subtitle {
             color: #8fd3f4;
-            font-size: 1.3em;
+            font-size: 1.4em;
             margin-top: 10px;
+            margin-bottom: 15px;
+            letter-spacing: 0.02em;
         }
-        ul, p, li {
+        ul, ol {
+            margin-top: 12px;
+            margin-bottom: 15px;
+            padding-left: 25px;
+        }
+        p {
             font-size: 1.15em;
             color: #f1f1f1;
+            margin-top: 12px;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        li {
+            font-size: 1.15em;
+            color: #f1f1f1;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        li strong, p strong {
+            color: #b388ff;
+            font-weight: 600;
         }
         code {
             background: #232526;
@@ -188,9 +235,54 @@
             font-family: 'Courier New', monospace;
             color: #e83e8c;
         }
+        .card .icon {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        .note {
+            background: rgba(143, 211, 244, 0.15);
+            border-left: 4px solid #8fd3f4;
+            padding: 12px 15px;
+            margin: 18px 0;
+            font-size: 1.05em;
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+        .note:before {
+            content: "\f0eb";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+            color: #8fd3f4;
+        }
+        .important {
+            background: rgba(138, 90, 220, 0.15);
+            border-left: 4px solid #8a5adc;
+            padding: 12px 15px;
+            margin: 18px 0;
+            font-size: 1.05em;
+            border-radius: 0 8px 8px 0;
+        }
+        .important:before {
+            content: "\f071";
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            display: inline-block;
+            margin-right: 8px;
+            vertical-align: middle;
+            color: #8a5adc;
+        }
+        .key-point {
+            font-weight: 600;
+            color: #b388ff;
+            display: inline-block;
+            border-bottom: 1px dotted #b388ff;
+        }
         @media (max-width: 900px) {
             .slide-content {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr !important;
                 padding: 30px 10px;
             }
             .image-area {
@@ -202,10 +294,10 @@
 <body>
     <!-- Splash animado -->
     <div id="splash-leyenda" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display:flex;flex-direction:row;align-items:center;justify-content:center;overflow:hidden;">
-        <video id="splash-video" src="video.mp4" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;"></video>
+        <video id="splash-video" src="xd.webm" autoplay loop playsinline style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;"></video>
         <div style="flex:1;"></div>
         <div id="splash-text-container" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;">
-            <div id="splash-text" style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:3em;color:#84fab0;letter-spacing:0.08em;text-shadow:0 2px 16px #8a5adc,0 0 2px #fff;text-align:center;"></div>
+            <div id="splash-text" style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:3em;color:#b388ff;letter-spacing:0.08em;text-shadow:0 2px 16px #8a5adc,0 0 2px #fff;text-align:center;font-weight:700;"></div>
             <div id="splash-sub" style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;font-size:1.2em;color:#8fd3f4;margin-top:18px;letter-spacing:0.04em;text-shadow:0 1px 8px #8a5adc;text-align:center;"></div>
         </div>
     </div>
@@ -232,184 +324,308 @@
             </div>
         </section>
         <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>¿Qué es SSL/TLS?</h2>
+                <h3><i class="fas fa-lock"></i> Definición</h3>
+                <p><strong>SSL (Secure Sockets Layer)</strong> y <strong>TLS (Transport Layer Security)</strong> son protocolos de seguridad que crean una conexión cifrada entre un servidor web y un navegador.</p>
+                <ul>
+                    <li>Protege datos sensibles (contraseñas, tarjetas de crédito)</li>
+                    <li>Verifica la identidad del sitio web</li>
+                    <li>Mejora el SEO (Google prioriza sitios HTTPS)</li>
+                    <li>Genera confianza en los visitantes</li>
+                </ul>
+                <p><strong>Nota:</strong> TLS es la evolución moderna de SSL, pero comúnmente se usa "SSL" para referirse a ambos.</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="SSL vs TLS" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>HTTP vs HTTPS</h2>
+                <h3><i class="fas fa-shield-alt"></i> La Diferencia Crucial</h3>
+                <p><strong>HTTP (HyperText Transfer Protocol):</strong></p>
+                <ul>
+                    <li>Datos viajan en texto plano</li>
+                    <li>Vulnerable a interceptación</li>
+                    <li>No verifica identidad del servidor</li>
+                </ul>
+                <p><strong>HTTPS (HTTP Secure):</strong></p>
+                <ul>
+                    <li>Datos cifrados con SSL/TLS</li>
+                    <li>Protege contra ataques man-in-the-middle</li>
+                    <li>Autenticación del servidor mediante certificado</li>
+                    <li>Navegadores muestran candado <i class="fas fa-lock"></i> en la barra de direcciones</li>
+                </ul>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80" alt="HTTP vs HTTPS" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>¿Cómo Funciona SSL/TLS?</h2>
+                <h3><i class="fas fa-sync-alt"></i> Proceso de Handshake</h3>
+                <ul>
+                    <li><i class="fas fa-arrow-right" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Cliente saluda:</strong> El navegador solicita conexión segura al servidor</li>
+                    <li><i class="fas fa-arrow-left" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Servidor responde:</strong> Envía su certificado SSL con clave pública</li>
+                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Verificación:</strong> El navegador verifica el certificado con la Autoridad Certificadora</li>
+                    <li><i class="fas fa-key" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Cifrado:</strong> Se establece conexión cifrada usando claves simétricas</li>
+                </ul>
+                <p>Todo sucede en milisegundos y es transparente para el usuario</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Handshake SSL" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Tipos de Certificados SSL/TLS</h2>
+                <h3><i class="fas fa-clipboard-list"></i> Por Nivel de Validación</h3>
+                <ul>
+                    <li><strong>DV - Domain Validation:</strong> Valida solo el dominio | Emisión rápida (minutos) | Económico</li>
+                    <li><strong>OV - Organization Validation:</strong> Valida dominio + organización | Emisión media (días) | Precio medio</li>
+                    <li><strong>EV - Extended Validation:</strong> Validación exhaustiva | Barra verde en navegador | Más costoso</li>
+                </ul>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Tipos SSL" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Tipos por Cobertura de Dominios</h2>
+                <ul>
+                    <li><i class="fas fa-home"></i> <strong>Single Domain:</strong> Protege un solo dominio (ejemplo.com)</li>
+                    <li><i class="fas fa-sitemap"></i> <strong>Wildcard:</strong> Protege un dominio + todos sus subdominios (*.ejemplo.com)</li>
+                    <li><i class="fas fa-building"></i> <strong>Multi-Domain (SAN):</strong> Protege múltiples dominios diferentes en un solo certificado</li>
+                </ul>
+                <p><strong>Ejemplo Wildcard:</strong> Un certificado para *.ejemplo.com protege blog.ejemplo.com, tienda.ejemplo.com, etc.</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="Cobertura SSL" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Sistema de Nombres de Dominio (DNS)</h2>
+                <h3><i class="fas fa-network-wired"></i> ¿Qué es DNS?</h3>
+                <p>El DNS es como la "agenda telefónica de Internet". Traduce nombres de dominio legibles a direcciones IP.</p>
+                <ul>
+                    <li>Escribes <code>www.google.com</code> en tu navegador</li>
+                    <li>Tu computadora consulta un servidor DNS</li>
+                    <li>El DNS devuelve la IP (ejemplo: 142.250.185.46)</li>
+                    <li>Tu navegador se conecta a esa IP</li>
+                </ul>
+                <p><strong>Sin DNS:</strong> Tendrías que memorizar direcciones IP como 142.250.185.46 en lugar de google.com</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="DNS" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Tipos de Registros DNS</h2>
+                <h3><i class="fas fa-list"></i> Registros Más Comunes</h3>
+                <table style="width:100%; border-collapse: collapse; margin-top: 18px; margin-bottom: 18px; font-size: 1em; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                    <thead>
+                        <tr>
+                            <th style="border: 1px solid #8a5adc; background: rgba(138, 90, 220, 0.3); padding: 12px; text-align: left; color: #b388ff; font-weight: 600;">Tipo</th>
+                            <th style="border: 1px solid #8a5adc; background: rgba(138, 90, 220, 0.3); padding: 12px; text-align: left; color: #b388ff; font-weight: 600;">Nombre (Ejemplo)</th>
+                            <th style="border: 1px solid #8a5adc; background: rgba(138, 90, 220, 0.3); padding: 12px; text-align: left; color: #b388ff; font-weight: 600;">Valor (Ejemplo)</th>
+                            <th style="border: 1px solid #8a5adc; background: rgba(138, 90, 220, 0.3); padding: 12px; text-align: left; color: #b388ff; font-weight: 600;">Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-map-marker-alt"></i> <strong>A</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com<br>www.ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">192.0.2.1</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Apunta a una dirección <strong>IPv4</strong>. Es el más común para sitios web.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-globe-americas"></i> <strong>AAAA</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">2001:0db8::1</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Apunta a una dirección <strong>IPv6</strong>. Versión moderna para más direcciones disponibles.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-link"></i> <strong>CNAME</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">www.ejemplo.com<br>blog.ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Crea un <strong>alias</strong> a otro dominio. No se puede usar en dominio raíz.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-envelope"></i> <strong>MX</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">mail.ejemplo.com<br>Prioridad: 10</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Especifica el <strong>servidor de correo</strong> para recibir emails del dominio.</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-file-alt"></i> <strong>TXT</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com<br>_dmarc.ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">"v=spf1 include:..."</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><strong>Texto arbitrario</strong>. Usado para verificaciones (SPF, DKIM, DMARC, Google, etc).</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-server"></i> <strong>NS</strong></td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">ns1.proveedor.com<br>ns2.proveedor.com</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">Define los <strong>servidores DNS autoritativos</strong> del dominio.</td>
+                        </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-cogs"></i> <strong>SRV</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">_sip._tcp.ejemplo.com</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">10 60 5060 sipserver.ejemplo.com</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">Define servicios específicos (VoIP, chat, etc). Incluye prioridad, peso, puerto y destino.</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-arrows-alt"></i> <strong>PTR</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">1.2.0.192.in-addr.arpa</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">Resuelve una IP a un nombre de dominio (usado en DNS reverso).</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;"><i class="fas fa-share-alt"></i> <strong>CAA</strong></td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">ejemplo.com</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0 issue "letsencrypt.org"</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">Indica qué autoridades certificadoras pueden emitir certificados SSL para el dominio.</td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>¿Qué es el TTL?</h2>
+                <h3><i class="fas fa-clock"></i> Time To Live</h3>
+                <p>El TTL define cuánto tiempo (en segundos) los servidores DNS deben almacenar en caché un registro antes de consultarlo nuevamente.</p>
+                <ul>
+                    <li><strong>TTL Bajo (300-600s):</strong> Cambios rápidos, mayor carga en DNS</li>
+                    <li><strong>TTL Medio (3600s):</strong> Equilibrio entre flexibilidad y rendimiento</li>
+                    <li><strong>TTL Alto (86400s):</strong> Menos consultas, cambios tardan más en propagarse</li>
+                </ul>
+                <p><strong>Ejemplo práctico:</strong> Si cambias la IP de tu servidor, un TTL de 3600s significa que puede tardar hasta 1 hora en actualizarse en todos los DNS.</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1501139083538-0139583c060f?auto=format&fit=crop&w=600&q=80" alt="TTL" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                    <h2>Configurando DNS: Registro tipo A</h2>
+                    <h3><i class="fas fa-cogs"></i> Ejemplo práctico y razones</h3>
+                    <ul>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>Tipo:</strong> <code>A</code> <br><span>El tipo A apunta tu dominio a una dirección IPv4, ideal para la mayoría de sitios web.</span></li>
+                        <li><i class="fas fa-asterisk"></i> <strong>Nombre:</strong> <code>*</code> <br><span>El asterisco permite que cualquier subdominio (por ejemplo, blog.tusitio.com) apunte a la misma IP. Útil para redirección global o landing.</span></li>
+                        <li><i class="fas fa-server"></i> <strong>Valor:</strong> <code>192.0.2.1</code> <br><span>Aquí va la IP de tu servidor. Así los visitantes llegan al sitio correcto.</span></li>
+                        <li><i class="fas fa-clock"></i> <strong>TTL:</strong> <code>3600</code> <br><span>TTL bajo (3600 segundos = 1 hora) permite que los cambios se propaguen más rápido en Internet.</span></li>
+                    </ul>
+                    <p style="margin-top:18px;" class="note"><strong style="color: #8fd3f4;">¿Por qué así?</strong> Usar <code>*</code> como nombre es útil si quieres que todos los subdominios apunten a la misma IP, el tipo A es el estándar para IPv4, y TTL bajo te ayuda a ver los cambios pronto si necesitas ajustar la configuración.</p>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" alt="SSL y DNS" />
+            </div>
+        </div>
+    </section>
+
+        <section class="section">
             <div class="slide-content">
                 <div class="card">
-                    <h2>¿Qué es SSL/TLS?</h2>
-                    <h3>🔐 Definición</h3>
-                    <p><strong>SSL (Secure Sockets Layer)</strong> y <strong>TLS (Transport Layer Security)</strong> son protocolos de seguridad que crean una conexión cifrada entre un servidor web y un navegador.</p>
+                    <h2>Instalación de Certbot - Preparación</h2>
+                    <h3><i class="fas fa-wrench"></i> Configuración Inicial (Rocky Linux/AlmaLinux)</h3>
+                    <p>Antes de instalar Certbot, necesitamos habilitar los repositorios necesarios:</p>
                     <ul>
-                        <li>Protege datos sensibles (contraseñas, tarjetas de crédito)</li>
-                        <li>Verifica la identidad del sitio web</li>
-                        <li>Mejora el SEO (Google prioriza sitios HTTPS)</li>
-                        <li>Genera confianza en los visitantes</li>
+                        <li><strong>EPEL Release:</strong> Repositorio con paquetes adicionales</li>
+                        <li><strong>CRB (CodeReady Builder):</strong> Repositorio para dependencias de desarrollo</li>
                     </ul>
-                    <p><strong>HTTP vs HTTPS:</strong> La "S" significa "Secure" (Seguro)</p>
+                    <p style="margin-top:20px;"><strong>Estos comandos son esenciales para poder instalar Certbot correctamente</strong></p>
                 </div>
-                <div class="image-area" id="console-ejemplo-ssl">
+                <div class="image-area" id="console-preparacion-certbot">
                 </div>
             </div>
         </section>
         <section class="section">
             <div class="slide-content">
                 <div class="card">
-                    <h2>¿Cómo Funciona SSL/TLS?</h2>
-                    <h3>🔄 Proceso de Handshake</h3>
+                    <h2>Configuración del VirtualHost - NGINX</h2>
+                    <h3><i class="fas fa-cogs"></i> Configuración HTTP y HTTPS</h3>
+                    <p>Configuramos NGINX con dos bloques de servidor:</p>
                     <ul>
-                        <li>1️⃣ Cliente saluda: El navegador solicita conexión segura al servidor</li>
-                        <li>2️⃣ Servidor responde: Envía su certificado SSL con clave pública</li>
-                        <li>3️⃣ Verificación: El navegador verifica el certificado con la Autoridad Certificadora</li>
-                        <li>4️⃣ Cifrado: Se establece conexión cifrada usando claves simétricas</li>
+                        <li><i class="fas fa-lock-open" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>HTTP (Puerto 80):</strong> Redirige automáticamente a HTTPS</li>
+                        <li><i class="fas fa-lock" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>HTTPS (Puerto 443):</strong> Conexión segura con SSL/TLS</li>
+                        <li><i class="fas fa-certificate" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Certificados:</strong> Apuntan a Let's Encrypt</li>
+                        <li><i class="fas fa-shield-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Protocolos:</strong> TLSv1.2 y TLSv1.3 recomendados</li>
                     </ul>
-                    <p>Todo sucede en milisegundos y es transparente para el usuario</p>
+                    <p><strong>Ubicación:</strong> /etc/nginx/conf.d/viernesbotanero.online.conf</p>
                 </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Handshake SSL" />
+                <div class="image-area" id="console-nginx-config">
                 </div>
             </div>
         </section>
         <section class="section">
             <div class="slide-content">
                 <div class="card">
-                    <h2>Tipos de Certificados SSL</h2>
-                    <h3>📋 Por Nivel de Validación</h3>
+                    <h2>Instalación de Certbot para NGINX</h2>
+                    <h3><i class="fas fa-box"></i> Instalar Certbot</h3>
+                    <p>Una vez configurados los repositorios, instalamos Certbot con el plugin de NGINX:</p>
                     <ul>
-                        <li><strong>DV - Domain Validation:</strong> Valida solo el dominio | Emisión rápida | Económico</li>
-                        <li><strong>OV - Organization Validation:</strong> Valida dominio + organización | Emisión media | Precio medio</li>
-                        <li><strong>EV - Extended Validation:</strong> Validación exhaustiva | Barra verde | Más costoso</li>
+                        <li><strong>certbot:</strong> Cliente para Let's Encrypt</li>
+                        <li><strong>python3-certbot-nginx:</strong> Plugin que modifica automáticamente la configuración de NGINX</li>
                     </ul>
+                    <p style="margin-top:20px;">Este paquete automatiza la configuración SSL en NGINX</p>
                 </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Tipos SSL" />
+                <div class="image-area" id="console-instalar-certbot">
                 </div>
             </div>
         </section>
         <section class="section">
             <div class="slide-content">
                 <div class="card">
-                    <h2>Tipos por Cobertura de Dominios</h2>
+                    <h2>Obtener Certificado SSL con Certbot</h2>
+                    <h3><i class="fas fa-bullseye"></i> Generar e Instalar Certificado</h3>
+                    <p>Ejecutamos Certbot para obtener e instalar el certificado automáticamente:</p>
                     <ul>
-                        <li>🏠 <strong>Single Domain:</strong> Protege un solo dominio</li>
-                        <li>🌐 <strong>Wildcard:</strong> Protege un dominio + todos sus subdominios</li>
-                        <li>🏢 <strong>Multi-Domain:</strong> Protege múltiples dominios diferentes</li>
+                        <li><strong>--nginx:</strong> Usa el plugin de NGINX</li>
+                        <li><strong>-d:</strong> Especifica el dominio</li>
+                        <li><strong>-v:</strong> Modo verbose (muestra detalles del proceso)</li>
                     </ul>
+                    <p style="margin-top:20px;"><strong>¡Certbot configurará automáticamente NGINX con SSL!</strong></p>
+                    <p>El certificado se renovará automáticamente cada 90 días</p>
                 </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="Cobertura SSL" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>Autoridades Certificadoras (CA)</h2>
-                    <h3>🏛️ ¿Qué son?</h3>
-                    <p>Organizaciones confiables que emiten y validan certificados SSL/TLS</p>
-                    <ul>
-                        <li>🆓 Let's Encrypt: Gratis, automatizado</li>
-                        <li>💼 DigiCert: Premium, alta confianza</li>
-                        <li>🔷 Sectigo (Comodo): Variedad de opciones</li>
-                        <li>🌍 GlobalSign: Certificados empresariales</li>
-                    </ul>
-                    <p><strong>Importante:</strong> Los navegadores solo validan certificados de CAs confiables.</p>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80" alt="CA SSL" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>Sistema de Nombres de Dominio (DNS)</h2>
-                    <h3>🌐 ¿Qué es DNS?</h3>
-                    <p>El DNS es como la "agenda telefónica de Internet". Traduce nombres de dominio legibles a direcciones IP.</p>
-                    <ul>
-                        <li>Escribes <code>www.google.com</code> en tu navegador</li>
-                        <li>Tu computadora consulta un servidor DNS</li>
-                        <li>El DNS devuelve la IP</li>
-                        <li>Tu navegador se conecta a esa IP</li>
-                    </ul>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="DNS" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>Registros DNS - Tipo A</h2>
-                    <h3>📍 Registro A (Address)</h3>
-                    <p>Apunta un dominio a una dirección IPv4.</p>
-                    <ul>
-                        <li>Dominio: ejemplo.com</li>
-                        <li>Tipo: A</li>
-                        <li>Valor: 192.0.2.1</li>
-                    </ul>
-                    <p>Usos: Apuntar dominio principal, subdominios, tráfico a servidores específicos.</p>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Registro A" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>Registros DNS - Tipo AAAA</h2>
-                    <h3>🌐 Registro AAAA (Quad-A)</h3>
-                    <p>Similar al registro A, pero para direcciones IPv6.</p>
-                    <ul>
-                        <li>Dominio: ejemplo.com</li>
-                        <li>Tipo: AAAA</li>
-                        <li>Valor: 2001:0db8:85a3:0000:0000:8a2e:0370:7334</li>
-                    </ul>
-                    <p>IPv4: 4 grupos de números (~4 mil millones de direcciones)</p>
-                    <p>IPv6: 8 grupos hexadecimales (340 undecillones de direcciones)</p>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Registro AAAA" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>Otros Registros DNS Importantes</h2>
-                    <ul>
-                        <li>📧 <strong>MX:</strong> Servidor de correo electrónico</li>
-                        <li>🔗 <strong>CNAME:</strong> Alias de dominio</li>
-                        <li>📝 <strong>TXT:</strong> Texto arbitrario, verificaciones</li>
-                        <li>🎯 <strong>NS:</strong> Servidores DNS autoritativos</li>
-                    </ul>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=600&q=80" alt="Registros DNS" />
-                </div>
-            </div>
-        </section>
-        <section class="section">
-            <div class="slide-content">
-                <div class="card">
-                    <h2>SSL/TLS + DNS: Trabajando Juntos</h2>
-                    <h3>🔗 Configuración Completa</h3>
-                    <ul>
-                        <li>1. Configurar DNS (Registro A o AAAA)</li>
-                        <li>2. Instalar certificado SSL</li>
-                        <li>3. Configurar servidor web para HTTPS</li>
-                        <li>4. Redireccionar HTTP → HTTPS</li>
-                    </ul>
-                    <p><strong>Tip:</strong> Muchos proveedores de hosting ofrecen SSL gratis con Let's Encrypt y configuración DNS integrada</p>
-                </div>
-                <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" alt="SSL y DNS" />
+                <div class="image-area" id="console-certbot-certificado">
                 </div>
             </div>
         </section>
         <section class="section" id="felicidades-section">
             <div class="slide-content">
                 <div class="card" style="align-items:center; text-align:center;">
-                    <h1 style="font-size:3em; margin-bottom:20px;">🎉 ¡Felicidades! 🎉</h1>
+                    <h1 style="font-size:3em; margin-bottom:20px;"><i class="fas fa-trophy" style="color: #b388ff; margin: 0 15px;"></i> ¡Felicidades! <i class="fas fa-trophy" style="color: #b388ff; margin: 0 15px;"></i></h1>
                     <p class="subtitle" style="font-size:1.5em; margin-bottom:20px;">Has completado la guía de instalación de certificados SSL/TLS</p>
                     <p style="font-size:1.2em;">Ahora tu sitio web está más seguro y profesional.<br>¡Sigue aprendiendo y protegiendo tus proyectos!</p>
                 </div>
@@ -458,16 +674,21 @@
     // Crear iconos flotantes de fondo
     function createFloatingIcons() {
         const container = document.getElementById('floating-icons');
+        if (!container) return; // Verificar que el contenedor existe
+        
+        // Limpiar iconos existentes
+        container.innerHTML = '';
+        
         const icons = [
-            'fa-lock', 'fa-shield-halved', 'fa-server', 'fa-cloud', 
+            'fa-lock', 'fa-shield-alt', 'fa-server', 'fa-cloud', 
             'fa-laptop-code', 'fa-key', 'fa-network-wired', 'fa-fingerprint',
-            'fa-user-shield', 'fa-database', 'fa-file-shield', 'fa-lock-open',
-            'fa-globe', 'fa-bug', 'fa-tower-cell', 'fa-code-branch'
+            'fa-user-shield', 'fa-database', 'fa-shield-alt', 'fa-lock-open',
+            'fa-globe', 'fa-bug', 'fa-signal', 'fa-code-branch'
         ];
         const numIcons = 40;
         const cols = 8;
         const rows = 5;
-        let usedPositions = [];
+        
         for (let i = 0; i < numIcons; i++) {
             const icon = document.createElement('i');
             const randomIcon = icons[Math.floor(Math.random() * icons.length)];
@@ -478,7 +699,7 @@
             let top = (row * (100 / rows)) + (Math.random() * 8 - 4);
             left = Math.max(0, Math.min(100, left));
             top = Math.max(0, Math.min(92, top));
-            usedPositions.push({left, top});
+            
             icon.style.left = left + '%';
             icon.style.top = top + '%';
             icon.style.animationDuration = (15 + Math.random() * 20) + 's';
@@ -486,6 +707,8 @@
             icon.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
             container.appendChild(icon);
         }
+        
+        console.log('Iconos flotantes generados:', numIcons);
     }
 
     // Lazy loading visual para todas las secciones
@@ -514,12 +737,15 @@
     window.addEventListener('scroll', lazyLoadSections);
     window.addEventListener('resize', lazyLoadSections);
     document.addEventListener('DOMContentLoaded', function() {
-        createFloatingIcons();
-        lazyLoadSections();
+        // Ejecutar después de un pequeño retardo para asegurarnos de que el DOM está completamente cargado
+        setTimeout(function() {
+            createFloatingIcons();
+            lazyLoadSections();
+        }, 100);
     });
 
     // Consola visual
-    function createConsoleExample(comando) {
+    function createConsoleExample(comando, showPrompt = true, typingSpeed = 90) {
         const container = document.createElement('div');
         container.className = 'console-example';
         container.innerHTML = `
@@ -528,6 +754,10 @@
                 <span class="dot yellow"></span>
                 <span class="dot green"></span>
                 <span style="margin-left:10px;">Terminal - Linux</span>
+                <button id="copy-console-btn" style="margin-left:auto;background:#b388ff;color:#232526;border:none;padding:6px 16px;border-radius:6px;cursor:pointer;font-size:0.95em;transition:all 0.2s;display:flex;align-items:center;gap:8px;font-weight:600;">
+                    <i class='fas fa-clipboard'></i>
+                    <span>Copiar</span>
+                </button>
             </div>
             <div class="console-body" id="console-typing-area"></div>
         `;
@@ -538,24 +768,30 @@
         let currentChar = 0;
         let typing = true;
         let cursorVisible = true;
-        let cursorChar = '<span style="display:inline-block;width:1ch;color:#84fab0;font-weight:bold;vertical-align:middle;animation:blink-cursor 1s steps(1) infinite;">|</span>';
+        let cursorChar = '<span style="display:inline-block;width:1ch;color:#b388ff;font-weight:bold;vertical-align:middle;animation:blink-cursor 1s steps(1) infinite;">|</span>';
         function typeNextChar() {
             if (!typing) return;
             let html = '';
             for (let i = 0; i < currentLine; i++) {
-                html += '<span class="console-prompt">$</span> ' + lines[i] + '<br>';
+                if (showPrompt) {
+                    html += '<span class="console-prompt">$</span> ' + lines[i] + '<br>';
+                } else {
+                    html += lines[i] + '<br>';
+                }
             }
-            html += '<span class="console-prompt">$</span> ';
+            if (showPrompt) {
+                html += '<span class="console-prompt">$</span> ';
+            }
             html += lines[currentLine].slice(0, currentChar);
             html += cursorChar;
             area.innerHTML = html;
             if (currentChar < lines[currentLine].length) {
                 currentChar++;
-                setTimeout(typeNextChar, 90); // Más lento
+                setTimeout(typeNextChar, typingSpeed); // Velocidad configurable
             } else if (currentLine < lines.length - 1) {
                 currentLine++;
                 currentChar = 0;
-                setTimeout(typeNextChar, 600); // Más lento entre líneas
+                setTimeout(typeNextChar, typingSpeed * 6); // Más lento entre líneas (proporcional)
             } else {
                 typing = false;
                 setTimeout(() => {
@@ -564,8 +800,8 @@
                     currentChar = 0;
                     typing = true;
                     area.innerHTML = '';
-                    setTimeout(typeNextChar, 900);
-                }, 1800);
+                    setTimeout(typeNextChar, typingSpeed * 10);
+                }, typingSpeed * 20);
             }
         }
         typeNextChar();
@@ -576,12 +812,101 @@
             style.innerHTML = `@keyframes blink-cursor {0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}`;
             document.head.appendChild(style);
         }
+        // Botón de copiado
+        setTimeout(() => {
+            const btn = container.querySelector('#copy-console-btn');
+            if (btn) {
+                btn.addEventListener('click', function() {
+                    navigator.clipboard.writeText(comando).then(() => {
+                        // Cambia a "¡Copiado!" pero mantiene el icono
+                        btn.innerHTML = `<span>¡Copiado!</span>`;
+                        btn.style.background = '#8fd3f4';
+                        setTimeout(() => {
+                            btn.innerHTML = `<i class='fas fa-clipboard'></i><span>Copiar</span>`;
+                            btn.style.background = '#b388ff';
+                        }, 1200);
+                    });
+                });
+            }
+        }, 500);
         return container;
     }
     document.addEventListener('DOMContentLoaded', function() {
         var area = document.getElementById('console-ejemplo-ssl');
         if (area) {
             area.appendChild(createConsoleExample('sudo apt update\nsudo apt install certbot'));
+        }
+        
+        // Consola para preparación de Certbot
+        var areaPrep = document.getElementById('console-preparacion-certbot');
+        if (areaPrep) {
+            areaPrep.appendChild(createConsoleExample('sudo dnf install epel-release -y\nsudo dnf config-manager --set-enabled crb'));
+        }
+        
+        // Consola para configuración de NGINX
+        var areaNginx = document.getElementById('console-nginx-config');
+        if (areaNginx) {
+            const nginxConfig = `# Redirigir HTTP a HTTPS
+server {
+    listen 80;
+    listen [::]:80;
+    server_name viernesbotanero.online www.viernesbotanero.online;
+
+    # Redirigir todo el tráfico a HTTPS
+    return 301 https://$host$request_uri;
+}
+
+# Configuración HTTPS
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+    server_name viernesbotanero.online www.viernesbotanero.online;
+
+    # Certificados SSL de Let's Encrypt
+    ssl_certificate /etc/letsencrypt/live/viernesbotanero.online/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/viernesbotanero.online/privkey.pem;
+
+    # Configuración SSL recomendada
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
+
+    # Directorio raíz de tu aplicación
+    root /usr/share/nginx/viernesbotanero.online.conf/certificados;
+    index index.html;
+
+    location / {
+        autoindex off;
+        try_files $uri $uri/ =404;
+    }
+
+    error_page 404 /404.html;
+    error_page 500 502 503 504 /500.html;
+
+    location = /404.html {
+        internal;
+    }
+
+    location = /500.html {
+        internal;
+    }
+}`;
+            // Crear consola para NGINX sin prompt ($) y con velocidad de escritura más lenta (1500ms)
+            areaNginx.appendChild(createConsoleExample(nginxConfig, false, 50));
+        }
+        
+        // Consola para instalar Certbot
+        var areaInstall = document.getElementById('console-instalar-certbot');
+        if (areaInstall) {
+            areaInstall.appendChild(createConsoleExample('sudo dnf install certbot python3-certbot-nginx -y'));
+        }
+        
+        // Consola para obtener certificado
+        var areaCert = document.getElementById('console-certbot-certificado');
+        if (areaCert) {
+            areaCert.appendChild(createConsoleExample('sudo certbot --nginx -d viernesbotanero.online -v'));
         }
     });
 
@@ -639,44 +964,60 @@
         (function() {
         let splash = document.getElementById('splash-leyenda');
         let text = 'Certificados SSL';
-        let sub = 'presentado por Daniel Eduardo Dominguez Montoya';
+        let sub = 'Presentado por:\nDaniel Eduardo Dominguez Montoya\nMaria Fernanda De la Cruz Gonzalez\nJonathan Alejandro Rios Lira\nAngel Moroni Hoyos';
         let textEl = document.getElementById('splash-text');
         let subEl = document.getElementById('splash-sub');
         let duration = 10000; // 10 segundos
-        let charDelay = duration / (text.length + sub.length + 8); // ajusta para ambos textos
-        let idx = 0;
-        let idxSub = 0;
-        let showingSub = false;
-        let scrollBlocked = true;
-        // Bloquear scroll
+        let textWords = text.split(/(\s+)/);
+        let subWords = sub.split(/(\s+)/);
+        let animatedWords = textWords.filter(p => !p.match(/\s+/)).length + subWords.filter(p => !p.match(/\s+/)).length;
+        let wordDelay = duration / (animatedWords + 4);
         document.body.style.overflow = 'hidden';
-        function typeText() {
-            if (idx < text.length) {
-                textEl.innerHTML += `<span style="display:inline-block;animation:pop 0.3s;">${text[idx]}</span>`;
-                idx++;
-                setTimeout(typeText, charDelay);
-            } else if (!showingSub) {
-                showingSub = true;
-                setTimeout(typeText, charDelay * 2);
-            } else if (idxSub < sub.length) {
-                subEl.innerHTML += `<span style="display:inline-block;animation:pop 0.3s;">${sub[idxSub]}</span>`;
-                idxSub++;
-                setTimeout(typeText, charDelay);
-            }
+
+        // Renderizar el texto completo invisible y luego mostrar palabra por palabra
+        function renderSplashText(container, parts) {
+            container.innerHTML = '';
+            parts.forEach((part) => {
+                let span = document.createElement('span');
+                span.textContent = part;
+                if (part.match(/\s+/)) {
+                    // space or newline, always visible
+                    span.style.opacity = '1';
+                } else {
+                    span.className = 'splash-word';
+                    span.style.opacity = '0';
+                }
+                container.appendChild(span);
+            });
         }
-        typeText();
-        // Animación pop para cada letra
+        renderSplashText(textEl, textWords);
+        renderSplashText(subEl, subWords);
+
+        // Animar la aparición de cada palabra en su posición final
+        function animateSplashWords(container, parts, startDelay = 0) {
+            let spans = container.querySelectorAll('.splash-word');
+            spans.forEach((span, i) => {
+                setTimeout(() => {
+                    span.style.animation = 'fadeLeft 0.7s forwards';
+                }, startDelay + i * wordDelay);
+            });
+        }
+        animateSplashWords(textEl, textWords, 0);
+        animateSplashWords(subEl, subWords, wordDelay * textWords.filter(p => !p.match(/\s+/)).length + wordDelay * 2);
+
+        // Animación fade de izquierda a derecha para cada palabra
         let style = document.createElement('style');
-        style.innerHTML = `@keyframes pop {0%{transform:scale(0.7);opacity:0.2;}60%{transform:scale(1.2);opacity:1;}100%{transform:scale(1);opacity:1;}}`;
+        style.innerHTML = `@keyframes fadeLeft {0%{opacity:0;transform:translateX(-40px);}60%{opacity:1;transform:translateX(8px);}100%{opacity:1;transform:translateX(0);}}
+        .splash-word {display:inline-block; opacity:0;}
+        #splash-text, #splash-sub { white-space: pre-wrap; }`;
         document.head.appendChild(style);
-        // Ocultar splash y habilitar scroll después de 10s
+
         setTimeout(function() {
             splash.style.opacity = '0';
             splash.style.transition = 'opacity 0.7s';
             setTimeout(function() {
                 splash.style.display = 'none';
                 document.body.style.overflow = '';
-                // Scroll automático a la primera card
                 var firstSection = document.querySelector('.section');
                 if (firstSection) {
                     firstSection.scrollIntoView({behavior:'smooth'});
@@ -684,6 +1025,11 @@
             }, 700);
         }, duration);
     })();
+    </script>
+    <script>
+        setInterval(() => {
+            console.clear();
+        }, 1000);
     </script>
 </body>
 </html>
