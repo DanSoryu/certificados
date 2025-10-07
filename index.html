@@ -295,6 +295,8 @@
     <!-- Splash animado -->
     <div id="splash-leyenda" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display:flex;flex-direction:row;align-items:center;justify-content:center;overflow:hidden;">
         <video id="splash-video" src="xdd.webm" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;"></video>
+        <!-- Botón invisible para activar audio -->
+        <button id="splash-audio-btn" style="position:absolute;top:0;left:0;width:100vw;height:100vh;z-index:10;background:transparent;border:none;cursor:pointer;opacity:0;"></button>
         <div style="flex:1;"></div>
         <div id="splash-text-container" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;">
             <div id="splash-text" style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:3em;color:#b388ff;letter-spacing:0.08em;text-shadow:0 2px 16px #8a5adc,0 0 2px #fff;text-align:center;font-weight:700;"></div>
@@ -962,6 +964,8 @@ server {
     <script>
         (function() {
         let splash = document.getElementById('splash-leyenda');
+        let splashVideo = document.getElementById('splash-video');
+        let splashAudioBtn = document.getElementById('splash-audio-btn');
         let text = 'Certificados SSL';
         let sub = 'Presentado por:\nDaniel Eduardo Dominguez Montoya\nMaria Fernanda De la Cruz Gonzalez\nJonathan Alejandro Rios Lira\nAngel Moroni Hoyos';
         let textEl = document.getElementById('splash-text');
@@ -1011,12 +1015,35 @@ server {
         #splash-text, #splash-sub { white-space: pre-wrap; }`;
         document.head.appendChild(style);
 
+        // Botón invisible para activar audio
+        function activarAudioSplash() {
+            if (splashVideo) {
+                splashVideo.muted = false;
+                splashVideo.volume = 1;
+                if (splashVideo.paused) splashVideo.play();
+            }
+        }
+        if (splashAudioBtn && splashVideo) {
+            splashAudioBtn.addEventListener('click', function(e) {
+                activarAudioSplash();
+            });
+            // Simular click automáticamente al mostrar el splash
+            setTimeout(function() {
+                splashAudioBtn.click();
+            }, 300); // pequeño retardo para asegurar que el DOM está listo
+        }
+
         setTimeout(function() {
             splash.style.opacity = '0';
             splash.style.transition = 'opacity 0.7s';
             setTimeout(function() {
                 splash.style.display = 'none';
                 document.body.style.overflow = '';
+                // Detener el audio si el video no está muted
+                if (splashVideo && !splashVideo.muted) {
+                    splashVideo.muted = true;
+                    splashVideo.pause();
+                }
                 var firstSection = document.querySelector('.section');
                 if (firstSection) {
                     firstSection.scrollIntoView({behavior:'smooth'});
