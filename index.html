@@ -9,6 +9,7 @@
     <meta name="google-site-verification" content="A4mBLhXm6FUuXMavgRUB1pLr0a75VJhNcCAkhReFAUM" />    
     <title>Certificados SSL/TLS y DNS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="dbz.ico">
     <style>
         * {
             margin: 0;
@@ -284,6 +285,39 @@
             display: inline-block;
             border-bottom: 1px dotted #b388ff;
         }
+        .section-divider {
+            width: 100vw;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .section-divider.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #8a5adc, transparent);
+            flex: 1;
+            max-width: 300px;
+        }
+        .section-divider h2 {
+            color: #b388ff;
+            font-size: 2em;
+            margin: 0;
+            white-space: nowrap;
+            text-shadow: 0 2px 10px rgba(138, 90, 220, 0.3);
+        }
         @media (max-width: 900px) {
             .slide-content {
                 grid-template-columns: 1fr !important;
@@ -291,6 +325,26 @@
             }
             .image-area {
                 margin-top: 30px;
+            }
+            .section-divider {
+                padding: 30px 10px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .section-divider::before,
+            .section-divider::after {
+                width: 80%;
+                max-width: none;
+            }
+            .section-divider h2 {
+                font-size: 1.5em;
+            }
+            #splash-leyenda {
+                position: fixed !important;
+                overflow: hidden !important;
+            }
+            body.splash-active {
+                overflow: hidden !important;
             }
         }
     </style>
@@ -322,7 +376,7 @@
                     </div>
                 </div>
                 <div class="image-area">
-                    <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" alt="SSL/TLS" />
+                    <img src="ssl.webp" alt="SSL/TLS" />
                 </div>
             </div>
         </section>
@@ -366,7 +420,7 @@
                 </ul>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&w=600&q=80" alt="HTTP vs HTTPS" />
+                <img src="http-https.webp" alt="HTTP vs HTTPS" />
             </div>
         </div>
     </section>
@@ -385,7 +439,7 @@
                 <p>Todo sucede en milisegundos y es transparente para el usuario</p>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="Handshake SSL" />
+                <img src="funcionamientossl.png" alt="Funcionamiento SSL" />
             </div>
         </div>
     </section>
@@ -538,6 +592,149 @@
         </div>
     </section>
 
+    <div class="section-divider">
+        <h2>Configuración en Entorno Local</h2>
+    </div>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Certificados SSL/TLS en Entorno Local</h2>
+                <h3><i class="fas fa-laptop-code"></i> Desarrollo y Pruebas</h3>
+                <p>Antes de implementar en producción, es recomendable configurar un entorno de pruebas local:</p>
+                <ul>
+                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Desarrollo seguro:</strong> Simular HTTPS en local</li>
+                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Pruebas completas:</strong> Detectar problemas de contenido mixto</li>
+                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Aprendizaje:</strong> Entender el proceso sin riesgos</li>
+                </ul>
+                <div class="important">
+                    <strong>Advertencia:</strong> Los certificados autofirmados generan advertencias de seguridad en los navegadores. Son solo para desarrollo y pruebas, no para sitios de producción.
+                </div>
+            </div>
+            <div class="image-area">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80" alt="Desarrollo Local SSL" />
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Crear Certificado SSL Autofirmado</h2>
+                <h3><i class="fas fa-certificate"></i> Generando Certificado con OpenSSL</h3>
+                <p>El primer paso es generar un certificado autofirmado usando OpenSSL:</p>
+                <ul>
+                    <li><i class="fas fa-key" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>req -x509:</strong> Solicita certificado X.509</li>
+                    <li><i class="fas fa-unlock" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-nodes:</strong> Sin cifrado (No DES)</li>
+                    <li><i class="fas fa-calendar-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-days 365:</strong> Válido por un año</li>
+                    <li><i class="fas fa-file-signature" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-newkey rsa:2048:</strong> Nueva clave RSA de 2048 bits</li>
+                </ul>
+                <p class="note">Este comando generará tanto la clave privada (.key) como el certificado (.crt) en un solo paso.</p>
+            </div>
+            <div class="image-area" id="console-crear-certificado">
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Configurar Permisos de Seguridad</h2>
+                <h3><i class="fas fa-shield-alt"></i> Protección de Archivos SSL</h3>
+                <p>Es importante establecer los permisos adecuados para los archivos del certificado:</p>
+                <ul>
+                    <li><i class="fas fa-key" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Clave privada:</strong> Solo lectura para el propietario (600)</li>
+                    <li><i class="fas fa-certificate" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Certificado:</strong> Lectura para todos (644)</li>
+                </ul>
+                <div class="note">
+                    <strong>¿Por qué estos permisos?</strong> La clave privada debe ser accesible solo por el servidor web, mientras que el certificado puede ser leído por cualquier proceso.
+                </div>
+            </div>
+            <div class="image-area" id="console-permisos">
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Configurar Virtual Host NGINX</h2>
+                <h3><i class="fas fa-server"></i> Archivo de Configuración del Sitio</h3>
+                <p>A continuación, creamos un archivo de configuración para nuestro dominio de desarrollo:</p>
+                <ul>
+                    <li><i class="fas fa-lock-open" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Puerto 80:</strong> Redirección a HTTPS</li>
+                    <li><i class="fas fa-lock" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Puerto 443:</strong> Configuración SSL con nuestro certificado</li>
+                    <li><i class="fas fa-shield-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Protocolos seguros:</strong> TLSv1.2 y TLSv1.3</li>
+                    <li><i class="fas fa-terminal" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Comando para crear VirtualHost:</strong> <code>sudo nano /etc/nginx/conf.d/danieldominio.com.conf</code></li>
+                </ul>
+                <p class="note">Esta configuración es similar a la de producción, pero usando certificados autofirmados.</p>
+            </div>
+            <div class="image-area" id="console-virtualhost">
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Preparar Directorio de la Web</h2>
+                <h3><i class="fas fa-folder-plus"></i> Crear Estructura de Archivos</h3>
+                <p>Necesitamos crear un directorio para nuestro sitio y asignarle los permisos adecuados:</p>
+                <ul>
+                    <li><i class="fas fa-folder" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>mkdir -p:</strong> Crear estructura de directorios completa</li>
+                    <li><i class="fas fa-user-shield" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>chown -R:</strong> Asignar propietario recursivamente</li>
+                </ul>
+                <p>El servidor web necesita permisos de escritura en este directorio para poder servir los archivos correctamente.</p>
+            </div>
+            <div class="image-area" id="console-directorios">
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Configurar Archivo Hosts Local</h2>
+                <h3><i class="fas fa-network-wired"></i> Resolución de Nombres Local</h3>
+                <p>Para simular un dominio real, editamos el archivo hosts del sistema:</p>
+                <ul>
+                    <li><i class="fas fa-map-marker-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>IP local:</strong> La dirección de nuestra máquina virtual</li>
+                    <li><i class="fas fa-globe" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Dominio:</strong> Nombre de dominio ficticio para desarrollo</li>
+                </ul>
+                <div class="important">
+                    <strong>Importante:</strong> Esta configuración solo afecta a tu máquina local, no a Internet.
+                </div>
+            </div>
+            <div class="image-area" id="console-hosts">
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="slide-content">
+            <div class="card">
+                <h2>Reiniciar NGINX y Probar</h2>
+                <h3><i class="fas fa-sync-alt"></i> Aplicar Cambios y Verificar</h3>
+                <p>Finalmente, reiniciamos NGINX para aplicar la configuración y probamos nuestro sitio:</p>
+                <ul>
+                    <li>Accedemos al dominio configurado vía HTTPS</li>
+                    <li>Veremos una advertencia de certificado no confiable</li>
+                    <li>Podemos añadir una excepción para desarrollo</li>
+                </ul>
+                <div class="note">
+                    <strong>Nota:</strong> La advertencia es normal con certificados autofirmados. En producción, usaremos certificados de autoridades reconocidas como Let's Encrypt.
+                </div>
+            </div>
+            <div class="image-area">
+                <img src="httpslocal.jpg" alt="Advertencia de seguridad" />
+            </div>
+        </div>
+    </section>
+
+    <div class="section-divider">
+        <h2>Configuración en Producción</h2>
+    </div>
+
     <section class="section">
         <div class="slide-content">
             <div class="card">
@@ -552,7 +749,7 @@
                     <p style="margin-top:18px;" class="note"><strong style="color: #8fd3f4;">¿Por qué así?</strong> Usar <code>*</code> como nombre es útil si quieres que todos los subdominios apunten a la misma IP, el tipo A es el estándar para IPv4, y TTL bajo te ayuda a ver los cambios pronto si necesitas ajustar la configuración.</p>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1519125323398-675f0ddb6308?auto=format&fit=crop&w=600&q=80" alt="SSL y DNS" />
+                <img src="goddady.png" alt="Configuración de DNS en GoDaddy" />
             </div>
         </div>
     </section>
@@ -633,6 +830,7 @@
                     <p style="font-size:1.2em;">Ahora tu sitio web está más seguro y profesional.<br>¡Sigue aprendiendo y protegiendo tus proyectos!</p>
                 </div>
                 <div class="image-area">
+                    <img src="https://media.tenor.com/1Qp8gQn6fWgAAAAC/evangelion-congratulations.gif" alt="Felicidades Evangelion GIF" />
                     <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;pointer-events:none;"></canvas>
                 </div>
             </div>
@@ -714,9 +912,9 @@
         console.log('Iconos flotantes generados:', numIcons);
     }
 
-    // Lazy loading visual para todas las secciones
+    // Lazy loading visual para todas las secciones y separadores
     function lazyLoadSections() {
-        const sections = document.querySelectorAll('.section');
+        const sections = document.querySelectorAll('.section, .section-divider');
         const windowHeight = window.innerHeight;
         sections.forEach(section => {
             const sectionTop = section.getBoundingClientRect().top;
@@ -726,8 +924,8 @@
                 if (loader) loader.remove();
                 section.classList.add('visible');
             } else {
-                // Si no hay loader, lo agregamos
-                if (!loader) {
+                // Si es una sección (no un separador) y no tiene loader, lo agregamos
+                if (!section.classList.contains('section-divider') && !loader) {
                     const loaderDiv = document.createElement('div');
                     loaderDiv.className = 'section-loader';
                     loaderDiv.innerHTML = '<div class="loader"></div>';
@@ -763,6 +961,12 @@
                 </button>
             </div>
             <div class="console-body" id="console-typing-area"></div>
+            <div style="text-align:right;padding:4px 10px;">
+                <button id="pause-console-btn" style="background:#8fd3f4;color:#232526;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.85em;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
+                    <i class='fas fa-pause'></i>
+                    <span>Pausar</span>
+                </button>
+            </div>
         `;
         // Animación de escritura letra por letra con cursor recuadro ▉
         let area = container.querySelector('#console-typing-area');
@@ -770,10 +974,12 @@
         let currentLine = 0;
         let currentChar = 0;
         let typing = true;
+        let isPaused = false;
         let cursorVisible = true;
         let cursorChar = '<span style="display:inline-block;width:1ch;color:#b388ff;font-weight:bold;vertical-align:middle;animation:blink-cursor 1s steps(1) infinite;">|</span>';
+        
         function typeNextChar() {
-            if (!typing) return;
+            if (!typing || isPaused) return;
             let html = '';
             for (let i = 0; i < currentLine; i++) {
                 if (showPrompt) {
@@ -808,6 +1014,24 @@
             }
         }
         typeNextChar();
+        
+        // Botón de pausa
+        setTimeout(() => {
+            const pauseBtn = container.querySelector('#pause-console-btn');
+            if (pauseBtn) {
+                pauseBtn.addEventListener('click', function() {
+                    isPaused = !isPaused;
+                    if (isPaused) {
+                        pauseBtn.innerHTML = `<i class='fas fa-play'></i><span>Continuar</span>`;
+                        pauseBtn.style.background = '#8a5adc';
+                    } else {
+                        pauseBtn.innerHTML = `<i class='fas fa-pause'></i><span>Pausar</span>`;
+                        pauseBtn.style.background = '#8fd3f4';
+                        typeNextChar(); // Continuar escribiendo
+                    }
+                });
+            }
+        }, 500);
         // Animación CSS para cursor
         if (!document.getElementById('blink-cursor-style')) {
             let style = document.createElement('style');
@@ -838,6 +1062,65 @@
         var area = document.getElementById('console-ejemplo-ssl');
         if (area) {
             area.appendChild(createConsoleExample('sudo apt update\nsudo apt install certbot'));
+        }
+        
+        // Consolas para entorno local con certificados autofirmados
+        var areaCrearCert = document.getElementById('console-crear-certificado');
+        if (areaCrearCert) {
+            areaCrearCert.appendChild(createConsoleExample('sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/danieldominio.com.key -out /etc/nginx/ssl/danieldominio.com.crt'));
+        }
+        
+        var areaPermisos = document.getElementById('console-permisos');
+        if (areaPermisos) {
+            areaPermisos.appendChild(createConsoleExample('sudo chmod 600 /etc/nginx/ssl/danieldominio.com.key\nsudo chmod 644 /etc/nginx/ssl/danieldominio.com.crt'));
+        }
+        
+        var areaVirtualHost = document.getElementById('console-virtualhost');
+        if (areaVirtualHost) {
+            const vhostConfig = `server {
+    listen 80;
+    server_name danieldominio.com www.danieldominio.com;
+
+    # Redirección opcional a HTTPS
+    return 301 https://$server_name$request_uri;
+}
+
+server {
+    listen 443 ssl http2;
+    server_name danieldominio.com www.danieldominio.com;
+
+    # Certificados SSL
+    ssl_certificate /etc/nginx/ssl/danieldominio.com.crt;
+    ssl_certificate_key /etc/nginx/ssl/danieldominio.com.key;
+
+    # Configuración SSL recomendada
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_ciphers HIGH:!aNULL:!MD5;
+    ssl_prefer_server_ciphers on;
+
+    # Root y documentos
+    root /usr/share/nginx/danieldominio.com;
+    index index.html;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}`;
+            setTimeout(() => {
+                areaVirtualHost.appendChild(createConsoleExample(vhostConfig, false, 30));
+            }, 2500);
+        }
+        
+        var areaDirs = document.getElementById('console-directorios');
+        if (areaDirs) {
+            areaDirs.appendChild(createConsoleExample('sudo mkdir -p /usr/share/nginx/danieldominio.com\nsudo chown -R nginx:nginx /usr/share/nginx/danieldominio.com\nsudo nano /usr/share/nginx/danieldominio.com/index.html'));
+        }
+        
+        var areaHosts = document.getElementById('console-hosts');
+        if (areaHosts) {
+            setTimeout(() => {
+                areaHosts.appendChild(createConsoleExample('sudo nano /etc/hosts\n192.168.26.129   danieldominio.com www.danieldominio.com', false, 40));
+            }, 2000);
         }
         
         // Consola para preparación de Certbot
@@ -896,7 +1179,7 @@ server {
         internal;
     }
 }`;
-            // Crear consola para NGINX sin prompt ($) y con velocidad de escritura más lenta (1500ms)
+            // Crear consola para NGINX sin prompt ($) y con velocidad de escritura más lenta
             areaNginx.appendChild(createConsoleExample(nginxConfig, false, 50));
         }
         
@@ -976,6 +1259,7 @@ server {
         let animatedWords = textWords.filter(p => !p.match(/\s+/)).length + subWords.filter(p => !p.match(/\s+/)).length;
         let wordDelay = duration / (animatedWords + 4);
         document.body.style.overflow = 'hidden';
+        document.body.classList.add('splash-active');
 
         // Renderizar el texto completo invisible y luego mostrar palabra por palabra
         function renderSplashText(container, parts) {
@@ -1021,6 +1305,7 @@ server {
             setTimeout(function() {
                 splash.style.display = 'none';
                 document.body.style.overflow = '';
+                document.body.classList.remove('splash-active');
                 var firstSection = document.querySelector('.section');
                 if (firstSection) {
                     firstSection.scrollIntoView({behavior:'smooth'});
