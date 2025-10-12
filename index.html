@@ -768,7 +768,7 @@
             <div class="card">
                 <h2>Configurar Archivo Hosts Local</h2>
                 <h3><i class="fas fa-network-wired"></i> Resolución de Nombres Local</h3>
-                <p>Para simular un dominio real, editamos el archivo hosts del sistema:</p>
+                <p>Para simular un dominio real, editamos el archivo hosts del sistema anfitrión:</p>
                 <ul>
                     <li><i class="fas fa-map-marker-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>IP local:</strong> La dirección de nuestra máquina virtual</li>
                     <li><i class="fas fa-globe" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Dominio:</strong> Nombre de dominio ficticio para desarrollo</li>
@@ -1293,7 +1293,7 @@ server {
         var areaHosts = document.getElementById('console-hosts');
         if (areaHosts) {
             setTimeout(() => {
-                areaHosts.appendChild(createConsoleExample('sudo nano /etc/hosts\n192.168.26.129   danieldominio.com www.danieldominio.com', false, 40));
+                areaHosts.appendChild(createConsoleExample('code "C:\\Windows\\System32\\drivers\\etc\\hosts"\n192.168.26.129   danieldominio.com', false, 40));
             }, 2000);
         }
         
