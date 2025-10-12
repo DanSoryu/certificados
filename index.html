@@ -10,6 +10,66 @@
     <title>Certificados SSL/TLS y DNS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" type="image/x-icon" href="dbz.ico">
+            <style>
+                /* Estilos para <img> y <video> en .image-area */
+                .image-area img,
+                .image-area video {
+                    max-width: 90%;
+                    max-height: 350px;
+                    border-radius: 16px;
+                    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+                    margin: 0 auto;
+                    display: block;
+                    transition: transform 0.25s cubic-bezier(.4,2,.3,1), box-shadow 0.25s cubic-bezier(.4,2,.3,1);
+                    cursor: pointer;
+                }
+                .image-area img:hover,
+                .image-area video:hover {
+                    transform: scale(1.08);
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.28);
+                }
+                /* Expansión al hacer clic (modal) para video igual que img */
+                .expanded-media {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    background: rgba(30,32,34,0.92);
+                    z-index: 99999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: fadeIn 0.3s;
+                }
+                .expanded-media img,
+                .expanded-media video {
+                    max-width: 90vw;
+                    max-height: 90vh;
+                    border-radius: 24px;
+                    box-shadow: 0 8px 32px rgba(0,0,0,0.38);
+                    background: #232526;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .expanded-media-close {
+                    position: absolute;
+                    top: 32px;
+                    right: 48px;
+                    font-size: 2.5em;
+                    color: #b388ff;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    z-index: 100000;
+                    transition: color 0.2s;
+                }
+                .expanded-media-close:hover {
+                    color: #fff;
+                }
+            </style>
     <style>
         * {
             margin: 0;
@@ -144,6 +204,12 @@
             border-radius: 16px;
             box-shadow: 0 4px 24px rgba(0,0,0,0.4);
         }
+            .console-area {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 350px;
+            }
         .console-example {
             width: 95%;
             max-width: 600px;
@@ -351,14 +417,14 @@
 </head>
 <body>
     <!-- Splash animado -->
-    <div id="splash-leyenda" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display:flex;flex-direction:row;align-items:center;justify-content:center;overflow:hidden;">
+    <!-- <div id="splash-leyenda" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;display:flex;flex-direction:row;align-items:center;justify-content:center;overflow:hidden;">
         <video id="splash-video" src="xdd.webm" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100vw;height:100vh;object-fit:cover;z-index:-1;"></video>
         <div style="flex:1;"></div>
         <div id="splash-text-container" style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;">
             <div id="splash-text" style="font-family:'Fira Mono','Consolas','Courier New',monospace;font-size:3em;color:#b388ff;letter-spacing:0.08em;text-shadow:0 2px 16px #8a5adc,0 0 2px #fff;text-align:center;font-weight:700;"></div>
             <div id="splash-sub" style="font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;font-size:1.2em;color:#8fd3f4;margin-top:18px;letter-spacing:0.04em;text-shadow:0 1px 8px #8a5adc;text-align:center;"></div>
         </div>
-    </div>
+    </div> -->
 
     <!-- Iconos flotantes de fondo -->
     <div class="floating-icons" id="floating-icons"></div>
@@ -371,16 +437,22 @@
                 <div class="card">
                     <h1>Certificados SSL/TLS para Web</h1>
                     <p class="subtitle">Seguridad y Configuración DNS</p>
-                    <div style="margin-top: 30px;">
-                        <p style="font-size: 1.2em;">Guía completa sobre certificados digitales</p>
-                    </div>
+                        <div class="presentado-por">
+                            <h3 style="color: #8fd3f4; margin-bottom: 10px;"><i class="fas fa-users"></i> Presentado por:</h3>
+                            <ul style="list-style:none; padding-left:0; font-size:1.12em;">
+                                <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Daniel Eduardo Dominguez Montoya</li>
+                                <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Maria Fernanda De la Cruz Gonzalez</li>
+                                <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Jonathan Alejandro Rios Lira</li>
+                                <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Angel Moroni Hoyos</li>
+                            </ul>
+                        </div>
                 </div>
                 <div class="image-area">
                     <img src="ssl.webp" alt="SSL/TLS" />
                 </div>
             </div>
         </section>
-        <section class="section">
+    <section class="section">
         <div class="slide-content">
             <div class="card">
                 <h2>¿Qué es SSL/TLS?</h2>
@@ -389,13 +461,12 @@
                 <ul>
                     <li>Protege datos sensibles (contraseñas, tarjetas de crédito)</li>
                     <li>Verifica la identidad del sitio web</li>
-                    <li>Mejora el SEO (Google prioriza sitios HTTPS)</li>
-                    <li>Genera confianza en los visitantes</li>
+                    <li>Mejora el SEO (Google solamente muestra sitios con HTTPS en su buscador)</li>
                 </ul>
                 <p><strong>Nota:</strong> TLS es la evolución moderna de SSL, pero comúnmente se usa "SSL" para referirse a ambos.</p>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80" alt="SSL vs TLS" />
+                <img src="tls.webp" alt="SSL y TLS" />
             </div>
         </div>
     </section>
@@ -416,7 +487,6 @@
                     <li>Datos cifrados con SSL/TLS</li>
                     <li>Protege contra ataques man-in-the-middle</li>
                     <li>Autenticación del servidor mediante certificado</li>
-                    <li>Navegadores muestran candado <i class="fas fa-lock"></i> en la barra de direcciones</li>
                 </ul>
             </div>
             <div class="image-area">
@@ -452,11 +522,11 @@
                 <ul>
                     <li><strong>DV - Domain Validation:</strong> Valida solo el dominio | Emisión rápida (minutos) | Económico</li>
                     <li><strong>OV - Organization Validation:</strong> Valida dominio + organización | Emisión media (días) | Precio medio</li>
-                    <li><strong>EV - Extended Validation:</strong> Validación exhaustiva | Barra verde en navegador | Más costoso</li>
+                    <li><strong>EV - Extended Validation:</strong> Validación exhaustiva | Emisión larga (semanas) | Más costoso</li>
                 </ul>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&q=80" alt="Tipos SSL" />
+                <img src="types-of-ssl-certificates-jpg.webp" alt="Tipos SSL" />
             </div>
         </div>
     </section>
@@ -473,7 +543,7 @@
                 <p><strong>Ejemplo Wildcard:</strong> Un certificado para *.ejemplo.com protege blog.ejemplo.com, tienda.ejemplo.com, etc.</p>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="Cobertura SSL" />
+                <img src="multi-domain-ssl-certificate.svg" alt="Cobertura SSL" style="background: #fff; border-radius: 16px;" />
             </div>
         </div>
     </section>
@@ -493,7 +563,7 @@
                 <p><strong>Sin DNS:</strong> Tendrías que memorizar direcciones IP como 142.250.185.46 en lugar de google.com</p>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1465101178521-c1a4c8a0f8f9?auto=format&fit=crop&w=600&q=80" alt="DNS" />
+                <img src="dns.png" alt="DNS" />
             </div>
         </div>
     </section>
@@ -604,7 +674,7 @@
                 <p>Antes de implementar en producción, es recomendable configurar un entorno de pruebas local:</p>
                 <ul>
                     <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Desarrollo seguro:</strong> Simular HTTPS en local</li>
-                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Pruebas completas:</strong> Detectar problemas de contenido mixto</li>
+                    <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Pruebas completas:</strong> Detectar problemas</li>
                     <li><i class="fas fa-check-circle" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Aprendizaje:</strong> Entender el proceso sin riesgos</li>
                 </ul>
                 <div class="important">
@@ -612,7 +682,7 @@
                 </div>
             </div>
             <div class="image-area">
-                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=600&q=80" alt="Desarrollo Local SSL" />
+                <img src="maquinavirtual.webp" alt="Desarrollo Local SSL" />
             </div>
         </div>
     </section>
@@ -628,10 +698,12 @@
                     <li><i class="fas fa-unlock" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-nodes:</strong> Sin cifrado (No DES)</li>
                     <li><i class="fas fa-calendar-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-days 365:</strong> Válido por un año</li>
                     <li><i class="fas fa-file-signature" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-newkey rsa:2048:</strong> Nueva clave RSA de 2048 bits</li>
+                    <li><i class="fas fa-key" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-keyout:</strong> Especifica el archivo de salida para la clave privada</li>
+                    <li><i class="fas fa-file" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>-out:</strong> Especifica el archivo de salida para el certificado</li>
                 </ul>
                 <p class="note">Este comando generará tanto la clave privada (.key) como el certificado (.crt) en un solo paso.</p>
             </div>
-            <div class="image-area" id="console-crear-certificado">
+            <div class="console-area" id="console-crear-certificado">
             </div>
         </div>
     </section>
@@ -650,7 +722,7 @@
                     <strong>¿Por qué estos permisos?</strong> La clave privada debe ser accesible solo por el servidor web, mientras que el certificado puede ser leído por cualquier proceso.
                 </div>
             </div>
-            <div class="image-area" id="console-permisos">
+            <div class="console-area" id="console-permisos">
             </div>
         </div>
     </section>
@@ -669,7 +741,7 @@
                 </ul>
                 <p class="note">Esta configuración es similar a la de producción, pero usando certificados autofirmados.</p>
             </div>
-            <div class="image-area" id="console-virtualhost">
+            <div class="console-area" id="console-virtualhost">
             </div>
         </div>
     </section>
@@ -686,7 +758,7 @@
                 </ul>
                 <p>El servidor web necesita permisos de escritura en este directorio para poder servir los archivos correctamente.</p>
             </div>
-            <div class="image-area" id="console-directorios">
+            <div class="console-area" id="console-directorios">
             </div>
         </div>
     </section>
@@ -705,7 +777,7 @@
                     <strong>Importante:</strong> Esta configuración solo afecta a tu máquina local, no a Internet.
                 </div>
             </div>
-            <div class="image-area" id="console-hosts">
+            <div class="console-area" id="console-hosts">
             </div>
         </div>
     </section>
@@ -719,10 +791,9 @@
                 <ul>
                     <li>Accedemos al dominio configurado vía HTTPS</li>
                     <li>Veremos una advertencia de certificado no confiable</li>
-                    <li>Podemos añadir una excepción para desarrollo</li>
                 </ul>
                 <div class="note">
-                    <strong>Nota:</strong> La advertencia es normal con certificados autofirmados. En producción, usaremos certificados de autoridades reconocidas como Let's Encrypt.
+                    <strong>Nota:</strong> La advertencia es normal con certificados autofirmados esto debido a la falta de una autoridad de certificación confiable. En producción, usaremos certificados de autoridades reconocidas como Let's Encrypt.
                 </div>
             </div>
             <div class="image-area">
@@ -758,15 +829,19 @@
             <div class="slide-content">
                 <div class="card">
                     <h2>Instalación de Certbot - Preparación</h2>
-                    <h3><i class="fas fa-wrench"></i> Configuración Inicial (Rocky Linux/AlmaLinux)</h3>
+                    <h3><i class="fas fa-wrench"></i> Configuración Inicial (Centos/Rocky Linux/AlmaLinux)</h3>
                     <p>Antes de instalar Certbot, necesitamos habilitar los repositorios necesarios:</p>
                     <ul>
-                        <li><strong>EPEL Release:</strong> Repositorio con paquetes adicionales</li>
-                        <li><strong>CRB (CodeReady Builder):</strong> Repositorio para dependencias de desarrollo</li>
+                        <li><strong>EPEL Release:</strong> Repositorio con paquetes adicionales.<br>
+                            <span style="color:#8fd3f4;">EPEL (Extra Packages for Enterprise Linux) es un repositorio mantenido por la comunidad que ofrece software extra y actualizado para distribuciones basadas en RHEL, como CentOS, Rocky Linux y AlmaLinux. Permite instalar herramientas que no están en los repositorios oficiales.</span>
+                        </li>
+                        <li><strong>CRB (CodeReady Builder):</strong> Repositorio para dependencias de desarrollo.<br>
+                            <span style="color:#8fd3f4;">CRB (CodeReady Builder) contiene paquetes y librerías necesarias para compilar, desarrollar y ejecutar software adicional en sistemas Enterprise Linux. Es esencial para instalar ciertas aplicaciones y dependencias modernas.</span>
+                        </li>
                     </ul>
                     <p style="margin-top:20px;"><strong>Estos comandos son esenciales para poder instalar Certbot correctamente</strong></p>
                 </div>
-                <div class="image-area" id="console-preparacion-certbot">
+                <div class="console-area" id="console-preparacion-certbot">
                 </div>
             </div>
         </section>
@@ -784,7 +859,7 @@
                     </ul>
                     <p><strong>Ubicación:</strong> /etc/nginx/conf.d/viernesbotanero.online.conf</p>
                 </div>
-                <div class="image-area" id="console-nginx-config">
+                <div class="console-area" id="console-nginx-config">
                 </div>
             </div>
         </section>
@@ -800,7 +875,7 @@
                     </ul>
                     <p style="margin-top:20px;">Este paquete automatiza la configuración SSL en NGINX</p>
                 </div>
-                <div class="image-area" id="console-instalar-certbot">
+                <div class="console-area" id="console-instalar-certbot">
                 </div>
             </div>
         </section>
@@ -818,7 +893,7 @@
                     <p style="margin-top:20px;"><strong>¡Certbot configurará automáticamente NGINX con SSL!</strong></p>
                     <p>El certificado se renovará automáticamente cada 90 días</p>
                 </div>
-                <div class="image-area" id="console-certbot-certificado">
+                <div class="console-area" id="console-certbot-certificado">
                 </div>
             </div>
         </section>
@@ -830,7 +905,7 @@
                     <p style="font-size:1.2em;">Ahora tu sitio web está más seguro y profesional.<br>¡Sigue aprendiendo y protegiendo tus proyectos!</p>
                 </div>
                 <div class="image-area">
-                    <img src="https://media.tenor.com/1Qp8gQn6fWgAAAAC/evangelion-congratulations.gif" alt="Felicidades Evangelion GIF" />
+                    <video src="cute-pikachu.mp4" alt="Felicidades" autoplay loop muted></video>
                     <canvas id="confetti-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:999;pointer-events:none;"></canvas>
                 </div>
             </div>
@@ -961,12 +1036,6 @@
                 </button>
             </div>
             <div class="console-body" id="console-typing-area"></div>
-            <div style="text-align:right;padding:4px 10px;">
-                <button id="pause-console-btn" style="background:#8fd3f4;color:#232526;border:none;padding:4px 10px;border-radius:4px;cursor:pointer;font-size:0.85em;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;font-weight:600;">
-                    <i class='fas fa-pause'></i>
-                    <span>Pausar</span>
-                </button>
-            </div>
         `;
         // Animación de escritura letra por letra con cursor recuadro ▉
         let area = container.querySelector('#console-typing-area');
@@ -974,12 +1043,46 @@
         let currentLine = 0;
         let currentChar = 0;
         let typing = true;
-        let isPaused = false;
-        let cursorVisible = true;
         let cursorChar = '<span style="display:inline-block;width:1ch;color:#b388ff;font-weight:bold;vertical-align:middle;animation:blink-cursor 1s steps(1) infinite;">|</span>';
-        
+
+        // Botón copiar funcional
+        const copyBtn = container.querySelector('#copy-console-btn');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                let textToCopy = lines.join('\n');
+                if (navigator.clipboard) {
+                    navigator.clipboard.writeText(textToCopy).then(() => {
+                        copyBtn.querySelector('span').textContent = '¡Copiado!';
+                        copyBtn.style.background = '#8fd3f4';
+                        copyBtn.style.color = '#232526';
+                        setTimeout(() => {
+                            copyBtn.querySelector('span').textContent = 'Copiar';
+                            copyBtn.style.background = '#b388ff';
+                            copyBtn.style.color = '#232526';
+                        }, 1200);
+                    });
+                } else {
+                    // Fallback para navegadores antiguos
+                    const temp = document.createElement('textarea');
+                    temp.value = textToCopy;
+                    document.body.appendChild(temp);
+                    temp.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(temp);
+                    copyBtn.querySelector('span').textContent = '¡Copiado!';
+                    copyBtn.style.background = '#8fd3f4';
+                    copyBtn.style.color = '#232526';
+                    setTimeout(() => {
+                        copyBtn.querySelector('span').textContent = 'Copiar';
+                        copyBtn.style.background = '#b388ff';
+                        copyBtn.style.color = '#232526';
+                    }, 1200);
+                }
+            });
+        }
+
         function typeNextChar() {
-            if (!typing || isPaused) return;
+            if (!typing) return;
             let html = '';
             for (let i = 0; i < currentLine; i++) {
                 if (showPrompt) {
@@ -1014,50 +1117,121 @@
             }
         }
         typeNextChar();
-        
-        // Botón de pausa
-        setTimeout(() => {
-            const pauseBtn = container.querySelector('#pause-console-btn');
-            if (pauseBtn) {
-                pauseBtn.addEventListener('click', function() {
-                    isPaused = !isPaused;
-                    if (isPaused) {
-                        pauseBtn.innerHTML = `<i class='fas fa-play'></i><span>Continuar</span>`;
-                        pauseBtn.style.background = '#8a5adc';
-                    } else {
-                        pauseBtn.innerHTML = `<i class='fas fa-pause'></i><span>Pausar</span>`;
-                        pauseBtn.style.background = '#8fd3f4';
-                        typeNextChar(); // Continuar escribiendo
+        return container;
+    // Expansión de imágenes al hacer clic
+    }
+
+    // Expansión de imágenes al hacer clic (fuera de la función)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.image-area img').forEach(function(img) {
+            img.style.cursor = 'pointer';
+            img.addEventListener('click', function() {
+                // Crear overlay
+                let overlay = document.createElement('div');
+                overlay.style.position = 'fixed';
+                overlay.style.top = '0';
+                overlay.style.left = '0';
+                overlay.style.width = '100vw';
+                overlay.style.height = '100vh';
+                overlay.style.background = 'rgba(20,20,30,0.95)';
+                overlay.style.zIndex = '99999';
+                overlay.style.display = 'flex';
+                overlay.style.alignItems = 'center';
+                overlay.style.justifyContent = 'center';
+                overlay.style.flexDirection = 'column';
+                overlay.style.animation = 'fadeInOverlay 0.3s';
+
+                // Imagen expandida con zoom y pan
+                let expandedImg = document.createElement('img');
+                expandedImg.src = img.src;
+                expandedImg.alt = img.alt;
+                expandedImg.style.maxWidth = '90vw';
+                expandedImg.style.maxHeight = '80vh';
+                expandedImg.style.borderRadius = '18px';
+                expandedImg.style.boxShadow = '0 8px 40px rgba(0,0,0,0.7)';
+                expandedImg.style.background = '#181a20';
+                expandedImg.style.objectFit = 'contain';
+                expandedImg.style.marginBottom = '24px';
+                expandedImg.style.transition = 'transform 0.2s';
+                expandedImg.style.cursor = 'grab';
+
+                let scale = 1;
+                let isDragging = false;
+                let lastX = 0, lastY = 0, offsetX = 0, offsetY = 0;
+
+                // Zoom con rueda
+                expandedImg.addEventListener('wheel', function(e) {
+                    e.preventDefault();
+                    let delta = e.deltaY > 0 ? -0.15 : 0.15;
+                    scale = Math.max(1, Math.min(4, scale + delta));
+                    expandedImg.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                });
+
+                // Pan (arrastrar)
+                expandedImg.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                    expandedImg.style.cursor = 'grabbing';
+                });
+                function onMove(e) {
+                    if (!isDragging) return;
+                    offsetX += (e.clientX - lastX) / scale;
+                    offsetY += (e.clientY - lastY) / scale;
+                    expandedImg.style.transform = `scale(${scale}) translate(${offsetX}px, ${offsetY}px)`;
+                    lastX = e.clientX;
+                    lastY = e.clientY;
+                }
+                function onUp() {
+                    if (isDragging) {
+                        isDragging = false;
+                        expandedImg.style.cursor = 'grab';
+                    }
+                }
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onUp);
+
+                // Botón de cerrar
+                let closeBtn = document.createElement('button');
+                closeBtn.innerHTML = '<i class="fas fa-times"></i> Cerrar';
+                closeBtn.style.background = '#b388ff';
+                closeBtn.style.color = '#232526';
+                closeBtn.style.border = 'none';
+                closeBtn.style.padding = '12px 32px';
+                closeBtn.style.borderRadius = '8px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.style.fontSize = '1.2em';
+                closeBtn.style.fontWeight = '600';
+                closeBtn.style.boxShadow = '0 2px 12px rgba(138,90,220,0.2)';
+                closeBtn.style.marginTop = '8px';
+
+                function removeOverlay() {
+                    document.body.removeChild(overlay);
+                    document.removeEventListener('mousemove', onMove);
+                    document.removeEventListener('mouseup', onUp);
+                }
+                closeBtn.addEventListener('click', removeOverlay);
+                overlay.addEventListener('click', function(e) {
+                    // Solo cerrar si se hace click fuera de la imagen y del botón
+                    if (e.target === overlay) {
+                        removeOverlay();
                     }
                 });
-            }
-        }, 500);
-        // Animación CSS para cursor
-        if (!document.getElementById('blink-cursor-style')) {
-            let style = document.createElement('style');
-            style.id = 'blink-cursor-style';
-            style.innerHTML = `@keyframes blink-cursor {0%{opacity:1;}50%{opacity:0;}100%{opacity:1;}}`;
-            document.head.appendChild(style);
-        }
-        // Botón de copiado
-        setTimeout(() => {
-            const btn = container.querySelector('#copy-console-btn');
-            if (btn) {
-                btn.addEventListener('click', function() {
-                    navigator.clipboard.writeText(comando).then(() => {
-                        // Cambia a "¡Copiado!" pero mantiene el icono
-                        btn.innerHTML = `<span>¡Copiado!</span>`;
-                        btn.style.background = '#8fd3f4';
-                        setTimeout(() => {
-                            btn.innerHTML = `<i class='fas fa-clipboard'></i><span>Copiar</span>`;
-                            btn.style.background = '#b388ff';
-                        }, 1200);
-                    });
-                });
-            }
-        }, 500);
-        return container;
-    }
+
+                overlay.appendChild(expandedImg);
+                overlay.appendChild(closeBtn);
+                document.body.appendChild(overlay);
+
+                // Animación CSS para overlay
+                if (!document.getElementById('fadeInOverlay-style')) {
+                    let style = document.createElement('style');
+                    style.id = 'fadeInOverlay-style';
+                    style.innerHTML = `@keyframes fadeInOverlay {0%{opacity:0;}100%{opacity:1;}}`;
+                    document.head.appendChild(style);
+                }
+            });
+        });
+    });
     document.addEventListener('DOMContentLoaded', function() {
         var area = document.getElementById('console-ejemplo-ssl');
         if (area) {
@@ -1246,7 +1420,7 @@ server {
     window.addEventListener('resize', checkConfetti);
     document.addEventListener('DOMContentLoaded', checkConfetti);
     </script>
-    <script>
+    <!-- <script>
         (function() {
         let splash = document.getElementById('splash-leyenda');
         let text = 'Certificados SSL';
@@ -1313,7 +1487,7 @@ server {
             }, 700);
         }, duration);
     })();
-    </script>
+    </script> -->
     <script>
         setInterval(() => {
             console.clear();
