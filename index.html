@@ -443,7 +443,6 @@
                                 <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Daniel Eduardo Dominguez Montoya</li>
                                 <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Maria Fernanda De la Cruz Gonzalez</li>
                                 <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Jonathan Alejandro Rios Lira</li>
-                                <li style="margin-bottom:8px;"><i class="fas fa-user" style="color:#b388ff; margin-right:8px;"></i> Angel Moroni Hoyos</li>
                             </ul>
                         </div>
                 </div>
@@ -812,7 +811,7 @@
                     <h2>Configurando DNS: Registro tipo A</h2>
                     <h3><i class="fas fa-cogs"></i> Ejemplo práctico y razones</h3>
                     <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> <strong>Tipo:</strong> <code>A</code> <br><span>El tipo A apunta tu dominio a una dirección IPv4, ideal para la mayoría de sitios web.</span></li>
+                        <li><i class="fas fa-map-marker-alt"></i> <strong>Tipo:</strong> <code>A</code> <br><span>El tipo A apunta tu dominio a una dirección IPv4, ideal para nuestro sitio web.</span></li>
                         <li><i class="fas fa-asterisk"></i> <strong>Nombre:</strong> <code>*</code> <br><span>El asterisco permite que cualquier subdominio (por ejemplo, blog.tusitio.com) apunte a la misma IP. Útil para redirección global o landing.</span></li>
                         <li><i class="fas fa-server"></i> <strong>Valor:</strong> <code>192.0.2.1</code> <br><span>Aquí va la IP de tu servidor. Así los visitantes llegan al sitio correcto.</span></li>
                         <li><i class="fas fa-clock"></i> <strong>TTL:</strong> <code>3600</code> <br><span>TTL bajo (3600 segundos = 1 hora) permite que los cambios se propaguen más rápido en Internet.</span></li>
@@ -854,8 +853,8 @@
                     <ul>
                         <li><i class="fas fa-lock-open" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>HTTP (Puerto 80):</strong> Redirige automáticamente a HTTPS</li>
                         <li><i class="fas fa-lock" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>HTTPS (Puerto 443):</strong> Conexión segura con SSL/TLS</li>
-                        <li><i class="fas fa-certificate" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Certificados:</strong> Apuntan a Let's Encrypt</li>
-                        <li><i class="fas fa-shield-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Protocolos:</strong> TLSv1.2 y TLSv1.3 recomendados</li>
+                        <li><i class="fas fa-certificate" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Certificado:</strong> Aprobado Let's Encrypt</li>
+                        <li><i class="fas fa-shield-alt" style="color: #8fd3f4; width: 20px; text-align: center; margin-right: 8px;"></i> <strong>Protocolos:</strong> TLSv1.2 y TLSv1.3</li>
                     </ul>
                     <p><strong>Ubicación:</strong> /etc/nginx/conf.d/viernesbotanero.online.conf</p>
                 </div>
@@ -1263,7 +1262,7 @@ server {
     listen 443 ssl http2;
     server_name danieldominio.com;
 
-    # Certificados SSL
+    # Certificado SSL
     ssl_certificate /etc/nginx/ssl/danieldominio.com.crt;
     ssl_certificate_key /etc/nginx/ssl/danieldominio.com.key;
 
@@ -1271,11 +1270,14 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_ciphers HIGH:!aNULL:!MD5;
     ssl_prefer_server_ciphers on;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_timeout 10m;
 
     root /usr/share/nginx/danieldominio.com;
     index index.html;
 
     location / {
+        autoindex off;
         try_files $uri $uri/ =404;
     }
 }`;
@@ -1305,23 +1307,18 @@ server {
         // Consola para configuración de NGINX
         var areaNginx = document.getElementById('console-nginx-config');
         if (areaNginx) {
-            const nginxConfig = `# Redirigir HTTP a HTTPS
-server {
+            const nginxConfig = `server {
     listen 80;
     listen [::]:80;
-    server_name viernesbotanero.online;
-
-    # Redirigir todo el tráfico a HTTPS
-    return 301 https://$host$request_uri;
+    server_name viernesbotanero.online www.viernesbotanero.online;
 }
 
-# Configuración HTTPS
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
-    server_name viernesbotanero.online;
+    server_name viernesbotanero.online www.viernesbotanero.online;
 
-    # Certificados SSL de Let's Encrypt
+    # Certificado SSL verificado por la entidad de Let's Encrypt
     ssl_certificate /etc/letsencrypt/live/viernesbotanero.online/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/viernesbotanero.online/privkey.pem;
 
